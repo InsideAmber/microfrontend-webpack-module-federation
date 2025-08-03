@@ -130,3 +130,4 @@ Summary Runtime Sequence:
 
 - Once fetched, `bootstrap.js` executes successfully.
 
+*No need of index.html in cart and products as it is only used during development. We will use index.html in container during both development and production*
