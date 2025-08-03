@@ -20,7 +20,34 @@ Combine many js file into one single file
 
 **What module federation does in products application:**
 
-![Module federation plugins](image.png)
+```js
+// 🔄 Module Federation Data Flow (Products Microfrontend)
+
+// ENTRY
+Products/index.js 
+   ↓
+
+// 🔧 Webpack Bundling
+Normal Bundling Process
+   ↓
+main.js   // ✅ Runs Products standalone
+   ↓
+
+// 🔗 Module Federation Plugin kicks in
+ModuleFederationPlugin
+   ↓
+remoteEntry.js   // 📦 Public file to expose remote modules
+   ├── src_index.js  // ✅ Remote-safe version of src/index.js
+   └── faker.js      // ✅ Remote-safe version of faker.js
+```
+
+Summary:
+
+- main.js allows independent execution.
+
+- remoteEntry.js allows federated module sharing via Module Federation.
+
+- src_index.js and faker.js are made remotely loadable versions of internal modules.
 
 **Container (Host App) — Data Flow with `bootstrap.js`:**
 
