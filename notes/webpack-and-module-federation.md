@@ -1,4 +1,4 @@
-## 1. What is webpack 
+## 1. What is webpack
 
 Combine many js file into one single file
 
@@ -24,7 +24,7 @@ Combine many js file into one single file
 // 🔄 Module Federation Data Flow (Products Microfrontend)
 
 // ENTRY
-Products/index.js 
+Products/index.js
    ↓
 
 // 🔧 Webpack Bundling
@@ -130,4 +130,48 @@ Summary Runtime Sequence:
 
 - Once fetched, `bootstrap.js` executes successfully.
 
-*No need of index.html in cart and products as it is only used during development. We will use index.html in container during both development and production*
+_No need of index.html in cart and products as it is only used during development. We will use index.html in container during both development and production_
+
+Dependency between different sub projects:
+
+```pgsql
+┌───────────────────────────────────────────────┐
+│ Container fetches Products remoteEntry.js file│
+└───────────────────────────┬───────────────────┘
+                            │
+                            ▼
+┌───────────────────────────────────────────┐
+│ Container fetches Cart remoteEntry.js file│
+└───────────────────────────┬───────────────┘
+                            │
+                            ▼
+┌───────────────────────────────────────────────┐
+│ Container notices that both require Faker!    │
+└───────────────────────────┬───────────────────┘
+                            │
+                            ▼
+┌───────────────────────────────────────────────────────────────┐
+│ Container can choose to load only one copy from Cart or Products│
+└───────────────────────────┬───────────────────────────────────┘
+                            │
+                            ▼
+┌───────────────────────────────────────────────────────────────┐
+│ Single copy is made available to both Cart + Products         │
+└───────────────────────────────────────────────────────────────┘
+```
+
+Async script loading:
+
+when it is available in shared modules but not individually
+
+Shared module versioning:
+
+suppose two different project team is using two different versions of same modules
+
+```js
+shared:{
+        faker: {
+          singleton: true,   // only want to load up one single copy of faker even if there are different version in different MFE
+         }
+      }
+```
